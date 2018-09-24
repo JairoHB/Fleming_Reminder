@@ -21,7 +21,7 @@ public class SplashActivity extends Activity {
 
         new Handler().postDelayed(new Runnable(){
             public void run(){
-                Intent intent = new Intent(SplashActivity.this, MedicineActivity.class);
+                Intent intent = new Intent(SplashActivity.this, login.class);
                 startActivity(intent);
                 finish();
             };

@@ -21,6 +21,7 @@
         </activity>
         <!-- <activity android:name=".MainActivity" /> -->
         <activity android:name=".medicine.MedicineActivity" />
+        <activity android:name=".login" />
         <activity android:name=".addmedicine.AddMedicineActivity" />
         <activity android:name=".alarm.ReminderActivity" />
         <activity android:name=".report.MonthlyReportActivity"/>

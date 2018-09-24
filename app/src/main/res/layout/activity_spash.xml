@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/colorPrimaryDark">
 
     <ImageView
         android:id="@+id/ivSplash"
@@ -22,8 +22,17 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="223dp"
+        android:fontFamily="monospace"
         android:text="Fleming Reminder"
-        android:textColor="@android:color/background_dark"
+        android:textColor="@android:color/background_light"
         android:textSize="30sp" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="104dp"
+        android:layout_height="77dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="132dp"
+        android:src="@drawable/blocks" />
 
 </RelativeLayout>
