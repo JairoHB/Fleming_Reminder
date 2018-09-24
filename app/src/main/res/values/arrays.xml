@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="caregiver_options">
+        <item>Ayuda</item>
+        <item>Borrar Contacto</item>
+        <item>Cancelar</item>
+    </array>
+
+    <array name="intervals_array">
+        <item>Cada 24 horas</item>
+        <item>Cada 12 horas</item>
+        <item>Cada 8 horas</item>
+        <item>Cada 6 horas</item>
+        <item>Cada 4 horas</item>
+        <item>Cada 2 horas</item>
+    </array>
+
+    <array name="medications_shape_array">
+        <item>adhesivo(s)</item>
+        <item>cápsula(s)</item>
+        <item>crema(s)</item>
+        <item>gragea(s)</item>
+        <item>emulsión(s)</item>
+        <item>paquete(s)</item>
+        <item>gel(s)</item>
+        <item>inhalación(s)</item>
+        <item>tomar(s)</item>
+        <item>loción(s)</item>
+        <item>probeta(s)</item>
+        <item>tableta(s)</item>
+        <item>polvo(s)</item>
+        <item>ungüento(s)</item>
+        <item>jabón(s)</item>
+        <item>bolsita(s)</item>
+        <item>unidad(s)</item>
+        <item>solución(s)</item>
+        <item>spray(s)</item>
+        <item>suspensión(s)</item>
+        <item>jarabe(s)</item>
+    </array>
+    <array name="pill_cycle_formats">
+        <item>21+7</item>
+        <item>22+6</item>
+        <item>23+5</item>
+        <item>24+4</item>
+        <item>26+2</item>
+        <item>28+0</item>
+        <item>35+7</item>
+        <item>42+7</item>
+        <item>63+7</item>
+        <item>84+7</item>
+        <item>14+14</item>
+    </array>
+    <array name="week_days_abbreviations">
+        <item>dom</item>
+        <item>lun</item>
+        <item>mar</item>
+        <item>mie</item>
+        <item>jue</item>
+        <item>vie</item>
+        <item>sab</item>
+    </array>
+</resources>

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Fleming Reminder</string>
+    <string name="title_medicine_name">Nombre de la medicina</string>
+    <string name="hint_enter_med_name">Ingresa Medicina</string>
+    <string name="medicine_days">Medicine Days</string>
+    <string name="title_treatment_deadline">Treatment deadline</string>
+    <string name="title_reminder">Recordatorio</string>
+    <string name="new_medicine">NUEVA MEDICINA</string>
+    <string name="every_day">Todos los días</string>
+    <string name="no_medicine_added">Sin medicina añadida</string>
+    <string name="loading_tasks_error">Error al cargar Fleming Reminder</string>
+    <string name="successfully_saved_me_message">Medicina añadida con éxito</string>
+    <string name="reminder_message">¡Es hora de tomar su medicamento!</string>
+    <string name="ignored">IGNORADO</string>
+    <string name="taken">TOMADOS</string>
+    <string name="all">TODOS</string>
+    <string name="menu_filter">Filtros</string>
+    <string name="all_label">Todas las Medicinas</string>
+    <string name="ignore_label">Medicinas Ignoradas</string>
+    <string name="taken_label">Medicinas Tomadas</string>
+    <string name="no_history">No hay historial que mostrar</string>
+    <string name="no_taken_med_history">Usted no ha tomado ningún medicamento</string>
+    <string name="no_ignored_history">¡Bien Hecho!</string>
+    <string name="menu_stats">Reporte Mensual</string>
+    <string name="title_continuous_use">Uso continuó</string>
+</resources>
