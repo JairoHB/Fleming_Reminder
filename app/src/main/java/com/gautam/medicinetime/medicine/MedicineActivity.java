@@ -1,20 +1,30 @@
 package com.gautam.medicinetime.medicine;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.telephony.SmsManager;
 
 import com.gautam.medicinetime.Injection;
 import com.gautam.medicinetime.R;
@@ -58,6 +68,9 @@ public class MedicineActivity extends AppCompatActivity {
 
     @BindView(R.id.fab_add_task)
     FloatingActionButton fabAddTask;
+
+    @BindView(R.id.fab_sms_task)
+    FloatingActionButton fabSmsTask;
 
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
@@ -115,6 +128,62 @@ public class MedicineActivity extends AppCompatActivity {
 
         //Create MedicinePresenter
         presenter = new MedicinePresenter(Injection.provideMedicineRepository(MedicineActivity.this), medicineFragment);
+
+        //SMS MESSAGE
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sms_task);
+        fab.setImageResource(R.drawable.ic_sms);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(MedicineActivity.this,
+                        Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Should we show an explanation?
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(MedicineActivity.this,
+                            Manifest.permission.CALL_PHONE)) {
+                        // Show an expanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                    } else {
+                        // No explanation needed, we can request the permission.
+                        ActivityCompat.requestPermissions(MedicineActivity.this,
+                                new String[]{Manifest.permission.CALL_PHONE},
+                                MY_PERMISSIONS_REQUEST_CALL_PHONE);
+                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                        // app-defined int constant. The callback method gets the
+                        // result of the request.
+                    }
+                }
+                    String strPhone = "8129066286";
+                    Intent dialIntent = new Intent(Intent.ACTION_CALL);
+                    dialIntent.setData(Uri.parse("tel:" + strPhone));
+                    startActivity(dialIntent);
+            }
+        });
+    }
+
+    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override
@@ -136,6 +205,11 @@ public class MedicineActivity extends AppCompatActivity {
         setSubtitle(dateFormat.format(date));
         mCompactCalendarView.setCurrentDate(date);
     }
+
+    /* public void sendSMS(String phoneNumber, String message) {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, null, null);
+    }*/
 
     public void setSubtitle(String subtitle) {
         datePickerTextView.setText(subtitle);
