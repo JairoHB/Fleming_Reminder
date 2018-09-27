@@ -108,6 +108,17 @@
         app:srcCompat="@drawable/ic_add" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_addpac_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/sixteen_dp"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="normal"
+        app:layout_anchor="@id/contentFrame"
+        app:layout_anchorGravity="bottom|left|end"
+        app:srcCompat="@drawable/ic_action_addpac" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_sms_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

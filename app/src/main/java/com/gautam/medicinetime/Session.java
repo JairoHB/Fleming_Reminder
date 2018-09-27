@@ -31,4 +31,17 @@ public class Session {
         return tipo;
     }
 
+    public void setid(String id){ prefs.edit().putString("id", id).commit(); }
+
+    public String getid(){
+        String id = prefs.getString("id","");
+        return id;
+    }
+
+    public void settel(String tel){ prefs.edit().putString("tel", tel).commit(); }
+
+    public String gettel(){
+        String tel = prefs.getString("tel","");
+        return tel;
+    }
 }

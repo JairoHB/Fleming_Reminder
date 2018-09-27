@@ -39,7 +39,7 @@ public class registermed extends Activity {
                 }
                 else {
                     if (pas.equals(pas2)){
-                        //user jairo28 pass 123 DOCTOR
+                        //user jairo27 pass 123 DOCTOR
                         Boolean chkeusername = db.chkusername(usn);
                         if(chkeusername==true){
                             Boolean chkemail = db.chkemail(ema);

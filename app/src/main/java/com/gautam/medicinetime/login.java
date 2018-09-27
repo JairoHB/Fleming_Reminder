@@ -38,28 +38,32 @@ public class login extends AppCompatActivity {
                 String usn = username.getText().toString();
                 String pas = password.getText().toString();
                 if(rbdoc.isChecked()){
-                    Boolean login1 = db.login_doc(usn, pas);
+                    String login1 = db.login_doc(usn, pas);
                     //username=jairo27 pass=123
-                    if(login1==false){
+                    if(!login1.equals("0")){
                         Toast.makeText(getApplicationContext(),"Incio Sesión Con Exito", Toast.LENGTH_SHORT).show();
                         session.setusername(usn);
                         session.settype("1");
+                        session.setid(login1);
                         Intent intent = new Intent(login.this, MedicineActivity.class);
                         startActivity(intent);
                     }
-                    else{
+                    else if (login1.equals("0")){
                         Toast.makeText(getApplicationContext(),"Contraseña o Usuario Incorrecto", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else if(rbpac.isChecked()){
-                    Boolean login1 = db.login_pac(usn, pas);
+                    String login1 = db.login_pac(usn, pas);
                     //username=jairo27 pass=123
-                    if(login1==false){
+                    if(!login1.equals("0")){
                         Toast.makeText(getApplicationContext(),"Incio Sesión Con Exito", Toast.LENGTH_SHORT).show();
+                        session.setusername(usn);
+                        session.settype("2");
+                        session.settel(login1);
                         Intent intent = new Intent(login.this, MedicineActivity.class);
                         startActivity(intent);
                     }
-                    else{
+                    else if (login1.equals("0")){
                         Toast.makeText(getApplicationContext(),"Contraseña o Usuario Incorrecto", Toast.LENGTH_SHORT).show();
                     }
                 }

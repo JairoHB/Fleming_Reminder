@@ -135,6 +135,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_PILL_ALARM_LINKS_TABLE);
         db.execSQL(CREATE_HISTORIES_TABLE);
         db.execSQL("Create table medicos (id INTEGER PRIMARY KEY AUTOINCREMENT, username Text not null, email Text not null, password Text not null, tipo_user integer default 1)");
+        db.execSQL("Create table pacientes (id INTEGER PRIMARY KEY AUTOINCREMENT, medico_fk INTEGER not null, name Text not null, username Text not null, tel Text not null, password Text not null, tipo_user integer default 2)");
     }
 
     @Override
@@ -144,6 +145,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + PILL_ALARM_LINKS);
         db.execSQL("drop table if exists medicos ");
+        db.execSQL("drop table if exists pacientes ");
         db.execSQL("DROP TABLE IF EXISTS " + HISTORIES_TABLE);
         onCreate(db);
     }
@@ -558,9 +560,30 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         else return true;
     }
 
+    public boolean insertpacientes(String name, String user_name, String tel, String user_password, String medico){
+        Integer med = Integer.valueOf(medico);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("medico_fk", med);
+        contentValues.put("name", name);
+        contentValues.put("username", user_name);
+        contentValues.put("tel", tel);
+        contentValues.put("password", user_password);
+        long ins = db.insert("pacientes", null, contentValues);
+        if(ins==1) return false;
+        else return true;
+    }
+
     public Boolean chkusername (String user_name){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select * from medicos where username = ?", new String[]{user_name});
+        if(cursor.getCount()>0) return false;
+        else return true;
+    }
+
+    public Boolean chkusernamepac (String user_name){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from pacientes where username = ?", new String[]{user_name});
         if(cursor.getCount()>0) return false;
         else return true;
     }
@@ -572,18 +595,24 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         else return true;
     }
 
-    public Boolean login_doc (String user_name, String user_password){
+    public String login_doc (String user_name, String user_password){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor1 = db.rawQuery("Select * from medicos where tipo_user = 1 and username = ? and password = ?", new String[]{user_name, user_password});
-        if(cursor1.getCount()>0) return false;
-        else return true;
+        Cursor cursor1 = db.rawQuery("Select id from medicos where tipo_user = 1 and username = ? and password = ?", new String[]{user_name, user_password});
+        cursor1.moveToFirst();
+        int value = cursor1.getInt(0);
+        String mvalue = String.valueOf(value);
+        if(cursor1.moveToFirst()) return mvalue;
+        else return "0";
     }
 
-    public Boolean login_pac (String user_name, String user_password){
+    public String login_pac (String user_name, String user_password){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor1 = db.rawQuery("Select * from medicos where tipo_user = 2 and username = ? and password = ?", new String[]{user_name, user_password});
-        if(cursor1.getCount()>0) return false;
-        else return true;
+        Cursor cursor1 = db.rawQuery("Select tel from pacientes where tipo_user = 2 and username = ? and password = ?", new String[]{user_name, user_password});
+        cursor1.moveToFirst();
+        String value = cursor1.getString(0);
+        String mvalue = String.valueOf(value);
+        if(cursor1.moveToFirst()) return mvalue;
+        else return "0";
     }
 
 }

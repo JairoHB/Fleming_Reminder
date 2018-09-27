@@ -11,24 +11,26 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.PermissionRequest;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.telephony.SmsManager;
+import android.widget.Toast;
 
 import com.gautam.medicinetime.Injection;
 import com.gautam.medicinetime.R;
 import com.gautam.medicinetime.Session;
+import com.gautam.medicinetime.registerpac;
 import com.gautam.medicinetime.report.MonthlyReportActivity;
 import com.gautam.medicinetime.utils.ActivityUtils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
@@ -93,14 +95,30 @@ public class MedicineActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         session = new Session(this);
-
         String tipo = session.gettype();
+        String tel = session.gettel();
 
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
         if(tipo.equals("1")){
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sms_task);
             fab.setImageResource(R.drawable.ic_sms);
             fab.setVisibility(FloatingActionButton.GONE);
         }
+        else if(tipo.equals("2")){
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addpac_task);
+            fab.setImageResource(R.drawable.ic_action_addpac);
+            fab.setVisibility(FloatingActionButton.GONE);
+        }
+
+        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_addpac_task);
+        fab1.setImageResource(R.drawable.ic_action_addpac);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MedicineActivity.this, registerpac.class);
+                startActivity(intent);
+            }
+        });
 
         mCompactCalendarView.setLocale(TimeZone.getDefault(), /*Locale.getDefault()*/Locale.ENGLISH);
 
@@ -146,54 +164,45 @@ public class MedicineActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MedicineActivity.this,
-                        Manifest.permission.CALL_PHONE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // Should we show an explanation?
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(MedicineActivity.this,
-                            Manifest.permission.CALL_PHONE)) {
-                        // Show an expanation to the user *asynchronously* -- don't block
-                        // this thread waiting for the user's response! After the user
-                        // sees the explanation, try again to request the permission.
-                    } else {
-                        // No explanation needed, we can request the permission.
-                        ActivityCompat.requestPermissions(MedicineActivity.this,
-                                new String[]{Manifest.permission.CALL_PHONE},
-                                MY_PERMISSIONS_REQUEST_CALL_PHONE);
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
-                    }
-                }
-                    String strPhone = "8129066286";
-                    Intent dialIntent = new Intent(Intent.ACTION_CALL);
-                    dialIntent.setData(Uri.parse("tel:" + strPhone));
-                    startActivity(dialIntent);
+                makeCall(tel);
             }
         });
     }
 
-    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
+    public void makeCall(String tel)
+    {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + tel));
+        int result = ContextCompat.checkSelfPermission(MedicineActivity.this, Manifest.permission.CALL_PHONE);
+        if (result == PackageManager.PERMISSION_GRANTED){
 
+            startActivity(intent);
+
+        } else {
+            requestPermission();
+        }
+    }
+
+    private void requestPermission()
+    {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(MedicineActivity.this,Manifest.permission.CALL_PHONE))
+        {
+        }
+        else {
+            ActivityCompat.requestPermissions(MedicineActivity.this,new String[]{Manifest.permission.CALL_PHONE},PERMISSION_REQUEST_CODE);
+        }
+    }
+    private static final int PERMISSION_REQUEST_CODE = 1;
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+    {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CALL_PHONE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    String tel = session.gettel();
+                    makeCall(tel);
                 }
-                return;
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
+                break;
         }
     }
 
