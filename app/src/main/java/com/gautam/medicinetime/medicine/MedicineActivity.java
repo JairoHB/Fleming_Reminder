@@ -28,6 +28,7 @@ import android.telephony.SmsManager;
 
 import com.gautam.medicinetime.Injection;
 import com.gautam.medicinetime.R;
+import com.gautam.medicinetime.Session;
 import com.gautam.medicinetime.report.MonthlyReportActivity;
 import com.gautam.medicinetime.utils.ActivityUtils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
@@ -43,7 +44,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MedicineActivity extends AppCompatActivity {
-
 
     @BindView(R.id.compactcalendar_view)
     CompactCalendarView mCompactCalendarView;
@@ -84,12 +84,23 @@ public class MedicineActivity extends AppCompatActivity {
 
     private boolean isExpanded = false;
 
+    private Session session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        session = new Session(this);
+
+        String tipo = session.gettype();
+
+        if(tipo.equals("1")){
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sms_task);
+            fab.setImageResource(R.drawable.ic_sms);
+            fab.setVisibility(FloatingActionButton.GONE);
+        }
 
         mCompactCalendarView.setLocale(TimeZone.getDefault(), /*Locale.getDefault()*/Locale.ENGLISH);
 

@@ -134,6 +134,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ALARM_TABLE);
         db.execSQL(CREATE_PILL_ALARM_LINKS_TABLE);
         db.execSQL(CREATE_HISTORIES_TABLE);
+        db.execSQL("Create table medicos (id INTEGER PRIMARY KEY AUTOINCREMENT, username Text not null, email Text not null, password Text not null, tipo_user integer default 1)");
     }
 
     @Override
@@ -142,6 +143,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + PILL_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + PILL_ALARM_LINKS);
+        db.execSQL("drop table if exists medicos ");
         db.execSQL("DROP TABLE IF EXISTS " + HISTORIES_TABLE);
         onCreate(db);
     }
@@ -543,4 +545,45 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         db.delete(PILL_TABLE, KEY_PILLNAME
                 + " = ?", new String[]{pillName});
     }
+
+    /** DATOS DE MEDICOS Y PACIENTES */
+    public boolean insertmedicos(String user_name, String user_email, String user_password){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("username", user_name);
+        contentValues.put("email", user_email);
+        contentValues.put("password", user_password);
+        long ins = db.insert("medicos", null, contentValues);
+        if(ins==1) return false;
+        else return true;
+    }
+
+    public Boolean chkusername (String user_name){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from medicos where username = ?", new String[]{user_name});
+        if(cursor.getCount()>0) return false;
+        else return true;
+    }
+
+    public Boolean chkemail (String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from medicos where email = ?", new String[]{email});
+        if(cursor.getCount()>0) return false;
+        else return true;
+    }
+
+    public Boolean login_doc (String user_name, String user_password){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = db.rawQuery("Select * from medicos where tipo_user = 1 and username = ? and password = ?", new String[]{user_name, user_password});
+        if(cursor1.getCount()>0) return false;
+        else return true;
+    }
+
+    public Boolean login_pac (String user_name, String user_password){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor1 = db.rawQuery("Select * from medicos where tipo_user = 2 and username = ? and password = ?", new String[]{user_name, user_password});
+        if(cursor1.getCount()>0) return false;
+        else return true;
+    }
+
 }

@@ -23,4 +23,5 @@
     <string name="no_ignored_history">¡Bien Hecho!</string>
     <string name="menu_stats">Reporte Mensual</string>
     <string name="title_continuous_use">Uso continuó</string>
+    <string name="text_subrayado"><u>Regístrate aquí</u></string>
 </resources>
