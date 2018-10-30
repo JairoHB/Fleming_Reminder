@@ -41,7 +41,6 @@ public class registerpac extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"No dejes ningun campo vacio", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), medico, Toast.LENGTH_SHORT).show();
                     //user jaz27 pass 123 DOCTOR
                     Boolean chkeusername = db.chkusernamepac(usn);
                     if(chkeusername==true){
@@ -56,5 +55,11 @@ public class registerpac extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void limpiar_pantalla(){
+        nom.setText("");
+        tel.setText("");
+        username.setText("");
+        password.setText("");
     }
 }

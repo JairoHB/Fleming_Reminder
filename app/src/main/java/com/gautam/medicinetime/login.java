@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.widget.RadioButton;
 import com.gautam.medicinetime.data.source.local.MedicineDBHelper;
 import com.gautam.medicinetime.medicine.MedicineActivity;
+import com.gautam.medicinetime.utils.PreferenceUtils;
 
 
 public class login extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        initViews();
 
         session = new Session(this);
         db= new MedicineDBHelper(this);
@@ -45,6 +47,8 @@ public class login extends AppCompatActivity {
                         session.setusername(usn);
                         session.settype("1");
                         session.setid(login1);
+                        PreferenceUtils.saveuser(usn, getApplicationContext());
+                        PreferenceUtils.savePassword(pas, getApplicationContext());
                         Intent intent = new Intent(login.this, MedicineActivity.class);
                         startActivity(intent);
                     }
@@ -60,6 +64,8 @@ public class login extends AppCompatActivity {
                         session.setusername(usn);
                         session.settype("2");
                         session.settel(login1);
+                        PreferenceUtils.saveuser(usn, getApplicationContext());
+                        PreferenceUtils.savePassword(pas, getApplicationContext());
                         Intent intent = new Intent(login.this, MedicineActivity.class);
                         startActivity(intent);
                     }
@@ -79,5 +85,15 @@ public class login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void initViews(){
+        PreferenceUtils utils = new PreferenceUtils();
+        if (utils.getuser(this) != null ){
+            Intent intent = new Intent(login.this, MedicineActivity.class);
+            startActivity(intent);
+        }else{
+
+        }
     }
 }

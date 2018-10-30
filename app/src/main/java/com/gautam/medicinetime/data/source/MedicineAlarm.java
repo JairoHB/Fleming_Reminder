@@ -23,6 +23,8 @@ public class MedicineAlarm implements Comparable<MedicineAlarm> {
 
     private String doseQuantity;
 
+    private String user;
+
     private String doseUnit;
 
     private String dateString;
@@ -32,13 +34,14 @@ public class MedicineAlarm implements Comparable<MedicineAlarm> {
 
     }
 
-    public MedicineAlarm(long id, int hour, int minute, String pillName, String doseQuantity, String doseUnit) {
+    public MedicineAlarm(long id, int hour, int minute, String pillName, String doseQuantity, String doseUnit, String user) {
         this.id = id;
         this.hour = hour;
         this.minute = minute;
         this.pillName = pillName;
         this.doseQuantity = doseQuantity;
         this.doseUnit = doseUnit;
+        this.user = user;
     }
 
     public String getDateString() {
@@ -120,6 +123,10 @@ public class MedicineAlarm implements Comparable<MedicineAlarm> {
     public void setPillName(String pillName) {
         this.pillName = pillName;
     }
+
+    public String getuser(){ return user;}
+
+    public  void setUser(String user){ this.user = user;}
 
     /**
      * Overrides the compareTo() method so that alarms can be sorted by time of day from earliest to

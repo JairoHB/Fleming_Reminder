@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gautam.medicinetime.data.source.local.MedicineDBHelper;
@@ -14,6 +15,7 @@ public class registermed extends Activity {
     MedicineDBHelper db;
     EditText username, email, password, password2;
     Button btnregistrar;
+    ImageView imgreg, face, google, twitter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,17 @@ public class registermed extends Activity {
         password=(EditText)findViewById(R.id.txtreg_pass);
         password2=(EditText)findViewById(R.id.txtreg_confpass);
         btnregistrar=(Button)findViewById(R.id.btnreg);
+
+        //Iniciar imagenes
+        imgreg=(ImageView)findViewById(R.id.imgreg);
+        face=(ImageView)findViewById(R.id.imgfacereg);
+        google=(ImageView)findViewById(R.id.imggooreg);
+        twitter=(ImageView)findViewById(R.id.imgtwireg);
+        imgreg.setImageResource(R.drawable.doctor);
+        face.setImageResource(R.drawable.facebook);
+        google.setImageResource(R.drawable.google);
+        twitter.setImageResource(R.drawable.twitter);
+
 
         btnregistrar.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -47,6 +60,7 @@ public class registermed extends Activity {
                                     Boolean insert1 = db.insertmedicos(usn, ema, pas);
                                     if (insert1 == true) {
                                         Toast.makeText(getApplicationContext(), "Registro Con Exito", Toast.LENGTH_SHORT).show();
+                                        limpiar_pantalla();
                                     }
                                 }
                                 else {
@@ -63,5 +77,11 @@ public class registermed extends Activity {
                 }
             }
         });
+    }
+    public void limpiar_pantalla(){
+        username.setText("");
+        email.setText("");
+        password.setText("");
+        password2.setText("");
     }
 }

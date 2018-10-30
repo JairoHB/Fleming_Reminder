@@ -15,10 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gautam.medicinetime.R;
+import com.gautam.medicinetime.Session;
 import com.gautam.medicinetime.addmedicine.AddMedicineActivity;
 import com.gautam.medicinetime.data.source.MedicineAlarm;
+import com.gautam.medicinetime.data.source.local.MedicineDBHelper;
 import com.gautam.medicinetime.views.RobotoLightTextView;
 
 import java.util.ArrayList;
@@ -60,6 +63,9 @@ public class MedicineFragment extends Fragment implements MedicineContract.View 
 
     private MedicineAdapter medicineAdapter;
 
+    private Session session;
+    MedicineDBHelper db;
+
 
     public MedicineFragment() {
 
@@ -75,7 +81,31 @@ public class MedicineFragment extends Fragment implements MedicineContract.View 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        medicineAdapter = new MedicineAdapter(new ArrayList<MedicineAlarm>(0));
+
+
+        session = new Session(getContext());
+        db= new MedicineDBHelper(getContext());
+        Integer userid = 0;
+        String us = "0";
+        String tipo = session.gettype();
+        String id = session.getid();
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
+        if(tipo.equals("1")){
+           us = db.pac_id(id);
+        }
+        else if(tipo.equals("2")){
+            us = id;
+        }
+        userid = Integer.valueOf(us);
+        ArrayList<MedicineAlarm> lista = db.consultarListaMedicine(userid);
+        medicineAdapter = new MedicineAdapter(lista);
+        if(lista.size()>=1){
+            medicineAdapter = new MedicineAdapter(lista);
+        }
+        else
+        {
+            Toast.makeText(getContext(),"23", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Nullable
@@ -129,9 +159,9 @@ public class MedicineFragment extends Fragment implements MedicineContract.View 
 
     @Override
     public void showMedicineList(List<MedicineAlarm> medicineAlarmList) {
-        medicineAdapter.replaceData(medicineAlarmList);
+        /*medicineAdapter.replaceData(medicineAlarmList);
         rvMedList.setVisibility(View.VISIBLE);
-        noMedView.setVisibility(View.GONE);
+        noMedView.setVisibility(View.GONE);*/
     }
 
     @Override

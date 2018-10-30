@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.SplittableRandom;
 
 
 /**
@@ -53,16 +54,16 @@ public class FakeMedicineLocalDataSource implements MedicineDataSource {
         addPills("Paracetamol", 1);
         addPills("Crocin", 2);
 
-        addMedicine(1, hour, minute, "Paracetamol", "1.0", "tablet(s)");
-        addMedicine(2, hour + 2, minute + 1, "Crocin", "2.0", "capsule(s)");
+        addMedicine(1, hour, minute, "Paracetamol", "1.0", "tablet(s)", "0");
+        addMedicine(2, hour + 2, minute + 1, "Crocin", "2.0", "capsule(s)", "0");
 
         addHistory(hour, minute, dateString, "Crocin", 2, "2.0", "capsule(s)");
         addHistory(hour + 2, minute + 1, dateString, "Paracetamol", 1, "1.0", "tablet(s)");
     }
 
 
-    private static void addMedicine(long id, int hour, int minute, String pillName, String doseQuantity, String doseUnit) {
-        MedicineAlarm medicineAlarm = new MedicineAlarm(id, hour, minute, pillName, doseQuantity, doseUnit);
+    private static void addMedicine(long id, int hour, int minute, String pillName, String doseQuantity, String doseUnit, String user_fk) {
+        MedicineAlarm medicineAlarm = new MedicineAlarm(id, hour, minute, pillName, doseQuantity, doseUnit, user_fk);
         MEDICINE_SERVICE_DATA.put(String.valueOf(id), medicineAlarm);
     }
 

@@ -30,7 +30,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
     /**
      * Database version
      */
-    private static final String DATABASE_NAME = "MedicineAlarm.db";
+    private static final String DATABASE_NAME = "MedicineAlarm_1.db";
 
     /**
      * Table names
@@ -54,6 +54,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
      * Alarm table columns, Hour & Minute used by History Table
      */
     private static final String KEY_INTENT = "intent";
+    private static final String KEY_USER = "user_fk";
     private static final String KEY_HOUR = "hour";
     private static final String KEY_MINUTE = "minute";
     private static final String KEY_DAY_WEEK = "day_of_week";
@@ -89,6 +90,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
             "create table " + ALARM_TABLE + "("
                     + KEY_ROWID + " integer primary key,"
                     + KEY_INTENT + " text,"
+                    + KEY_USER + " integer,"
                     + KEY_HOUR + " integer,"
                     + KEY_MINUTE + " integer,"
                     + KEY_ALARMS_PILL_NAME + " text not null,"
@@ -186,6 +188,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
             if (day) {
                 ContentValues values = new ContentValues();
                 values.put(KEY_HOUR, alarm.getHour());
+                values.put(KEY_USER, alarm.getuser());
                 values.put(KEY_MINUTE, alarm.getMinute());
                 values.put(KEY_DAY_WEEK, arrayPos + 1);
                 values.put(KEY_ALARMS_PILL_NAME, alarm.getPillName());
@@ -596,23 +599,69 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
     }
 
     public String login_doc (String user_name, String user_password){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor1 = db.rawQuery("Select id from medicos where tipo_user = 1 and username = ? and password = ?", new String[]{user_name, user_password});
-        cursor1.moveToFirst();
-        int value = cursor1.getInt(0);
-        String mvalue = String.valueOf(value);
-        if(cursor1.moveToFirst()) return mvalue;
-        else return "0";
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor1 = db.rawQuery("Select id from medicos where tipo_user = 1 and username = ? and password = ?", new String[]{user_name, user_password});
+            cursor1.moveToFirst();
+            int value = cursor1.getInt(0);
+            String mvalue = String.valueOf(value);
+            if (cursor1.moveToFirst()) return mvalue;
+            else return "0";
+        }
+        catch (Exception ex){
+            return "0";
+        }
     }
 
     public String login_pac (String user_name, String user_password){
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor1 = db.rawQuery("Select tel from pacientes where tipo_user = 2 and username = ? and password = ?", new String[]{user_name, user_password});
-        cursor1.moveToFirst();
-        String value = cursor1.getString(0);
-        String mvalue = String.valueOf(value);
-        if(cursor1.moveToFirst()) return mvalue;
-        else return "0";
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor1 = db.rawQuery("Select tel from pacientes where tipo_user = 2 and username = ? and password = ?", new String[]{user_name, user_password});
+            cursor1.moveToFirst();
+            String value = cursor1.getString(0);
+            String mvalue = String.valueOf(value);
+            if (cursor1.moveToFirst()) return mvalue;
+            else return "0";
+        }
+        catch (Exception ex){
+            return "0";
+        }
     }
 
+    public String pac_id (String id){
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor1 = db.rawQuery("Select id from pacientes where medico_fk = ?", new String[]{id});
+            cursor1.moveToFirst();
+            String value = cursor1.getString(0);
+            String mvalue = String.valueOf(value);
+            if (cursor1.moveToFirst()) return mvalue;
+            else return "0";
+        }
+        catch (Exception ex){
+            return "0";
+        }
+    }
+
+    ArrayList<MedicineAlarm> listaMedicinas = new ArrayList<MedicineAlarm>();
+
+    public ArrayList<MedicineAlarm> consultarListaMedicine(Integer user_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        MedicineAlarm medicinas=null;
+        String user = String.valueOf(user_id);
+        Cursor cursor=db.rawQuery("SELECT id, date, hour, minute, pillName, dose_quantity, dose_units  FROM alarms where  user_fk = ?", new String[]{user});
+        while (cursor != null && cursor.moveToNext()){
+            medicinas=new MedicineAlarm();
+            medicinas.setId(cursor.getLong(cursor.getColumnIndex("id")));
+            medicinas.setDateString(cursor.getString(cursor.getColumnIndex("date")));
+            medicinas.setHour(cursor.getInt(cursor.getColumnIndex("hour")));
+            medicinas.setMinute(cursor.getInt(cursor.getColumnIndex("minute")));
+            medicinas.setPillName(cursor.getString(cursor.getColumnIndex("pillName")));
+            medicinas.setDoseQuantity(cursor.getString(cursor.getColumnIndex("dose_quantity")));
+            medicinas.setDoseUnit(cursor.getString(cursor.getColumnIndex("dose_units")));
+
+            listaMedicinas.add(medicinas);
+        }
+        return listaMedicinas;
+    }
 }

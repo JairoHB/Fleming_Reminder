@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,10 +25,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.gautam.medicinetime.R;
+import com.gautam.medicinetime.Session;
 import com.gautam.medicinetime.alarm.ReminderActivity;
 import com.gautam.medicinetime.alarm.ReminderFragment;
 import com.gautam.medicinetime.data.source.MedicineAlarm;
 import com.gautam.medicinetime.data.source.Pills;
+import com.gautam.medicinetime.data.source.local.MedicineDBHelper;
 import com.gautam.medicinetime.views.DayViewCheckBox;
 import com.gautam.medicinetime.views.RobotoBoldTextView;
 
@@ -114,6 +117,11 @@ public class AddMedicineFragment extends Fragment implements AddMedicineContract
 
     private String doseUnit;
 
+    private String user_id;
+
+    private Session session;
+
+    MedicineDBHelper db;
 
     public static AddMedicineFragment newInstance() {
         Bundle args = new Bundle();
@@ -128,6 +136,18 @@ public class AddMedicineFragment extends Fragment implements AddMedicineContract
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_edit_task_done);
         fab.setImageResource(R.drawable.ic_done);
         fab.setOnClickListener(setClickListener);
+
+        db= new MedicineDBHelper(getContext());
+        session = new Session(getContext());
+        String tipo = session.gettype();
+        String id = session.getid();
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
+        if(tipo.equals("1")){
+            user_id = db.pac_id(id);
+        }
+        else if(tipo.equals("2")){
+            user_id = id;
+        }
     }
 
 
@@ -153,8 +173,8 @@ public class AddMedicineFragment extends Fragment implements AddMedicineContract
 
     @Override
     public void showMedicineList() {
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
+        /*getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();*/
     }
 
     @Override
@@ -312,6 +332,7 @@ public class AddMedicineFragment extends Fragment implements AddMedicineContract
                 alarm.setDateString(dateString);
                 alarm.setHour(hour);
                 alarm.setMinute(minute);
+                alarm.setUser(user_id);
                 alarm.setPillName(pill_name);
                 alarm.setDayOfWeek(dayOfWeekList);
                 alarm.setDoseUnit(doseUnit);
@@ -325,6 +346,7 @@ public class AddMedicineFragment extends Fragment implements AddMedicineContract
                 alarm.setDateString(dateString);
                 alarm.setHour(hour);
                 alarm.setMinute(minute);
+                alarm.setUser(user_id);
                 alarm.setPillName(pill_name);
                 alarm.setDayOfWeek(dayOfWeekList);
                 alarm.setDoseUnit(doseUnit);
