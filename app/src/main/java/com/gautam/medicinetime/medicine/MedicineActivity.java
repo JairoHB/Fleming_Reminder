@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.PermissionRequest;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,9 +31,11 @@ import android.widget.Toast;
 import com.gautam.medicinetime.Injection;
 import com.gautam.medicinetime.R;
 import com.gautam.medicinetime.Session;
+import com.gautam.medicinetime.login;
 import com.gautam.medicinetime.registerpac;
 import com.gautam.medicinetime.report.MonthlyReportActivity;
 import com.gautam.medicinetime.utils.ActivityUtils;
+import com.gautam.medicinetime.utils.PreferenceUtils;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
 import java.text.SimpleDateFormat;
@@ -80,6 +83,9 @@ public class MedicineActivity extends AppCompatActivity {
     @BindView(R.id.date_picker_arrow)
     ImageView arrow;
 
+    @BindView(R.id.imgbtnlogout)
+    ImageButton logout;
+
     private MedicinePresenter presenter;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd", /*Locale.getDefault()*/Locale.ENGLISH);
@@ -117,6 +123,17 @@ public class MedicineActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MedicineActivity.this, registerpac.class);
                 startActivity(intent);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PreferenceUtils.savePassword(null, getApplicationContext());
+                PreferenceUtils.saveuser(null, getApplicationContext());
+                Intent intent = new Intent(MedicineActivity.this, login.class);
+                startActivity(intent);
+                finish();
             }
         });
 

@@ -2,6 +2,7 @@ package com.gautam.medicinetime.data.source.local;
 
 import android.content.Context;
 
+import com.gautam.medicinetime.Session;
 import com.gautam.medicinetime.data.source.History;
 import com.gautam.medicinetime.data.source.MedicineAlarm;
 import com.gautam.medicinetime.data.source.MedicineDataSource;
@@ -20,9 +21,14 @@ public class MedicinesLocalDataSource implements MedicineDataSource {
 
     private MedicineDBHelper mDbHelper;
 
+    private Session session;
+
+    private String user_id;
+
 
     private MedicinesLocalDataSource(Context context) {
         mDbHelper = new MedicineDBHelper(context);
+        session = new Session(context);
     }
 
     public static MedicinesLocalDataSource getInstance(Context context) {
@@ -35,7 +41,16 @@ public class MedicinesLocalDataSource implements MedicineDataSource {
 
     @Override
     public void getMedicineHistory(LoadHistoryCallbacks loadHistoryCallbacks) {
-        List<History> historyList = mDbHelper.getHistory();
+        String tipo = session.gettype();
+        String id = session.getid();
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
+        if(tipo.equals("1")){
+            user_id = mDbHelper.pac_id(id);
+        }
+        else if(tipo.equals("2")){
+            user_id = id;
+        }
+        List<History> historyList = mDbHelper.getHistory(user_id);
         loadHistoryCallbacks.onHistoryLoaded(historyList);
     }
 
@@ -142,7 +157,16 @@ public class MedicinesLocalDataSource implements MedicineDataSource {
     }
 
     public List<History> getHistory() {
-        return mDbHelper.getHistory();
+        String tipo = session.gettype();
+        String id = session.getid();
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
+        if(tipo.equals("1")){
+            user_id = mDbHelper.pac_id(id);
+        }
+        else if(tipo.equals("2")){
+            user_id = id;
+        }
+        return mDbHelper.getHistory(user_id);
     }
 
     private MedicineAlarm getAlarmById(long alarm_id) throws URISyntaxException {

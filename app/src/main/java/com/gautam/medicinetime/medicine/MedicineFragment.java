@@ -159,9 +159,9 @@ public class MedicineFragment extends Fragment implements MedicineContract.View 
 
     @Override
     public void showMedicineList(List<MedicineAlarm> medicineAlarmList) {
-        /*medicineAdapter.replaceData(medicineAlarmList);
+        //medicineAdapter.replaceData(medicineAlarmList);
         rvMedList.setVisibility(View.VISIBLE);
-        noMedView.setVisibility(View.GONE);*/
+        noMedView.setVisibility(View.GONE);
     }
 
     @Override

@@ -489,12 +489,11 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
      *
      * @return a list of all history objects
      */
-    public List<History> getHistory() {
+    public List<History> getHistory(String user_fk) {
         List<History> allHistory = new ArrayList<>();
-        String dbHist = "SELECT * FROM " + HISTORIES_TABLE;
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery(dbHist, null);
+        Cursor c = db.rawQuery("SELECT h.* FROM histories as h, alarms as a where a.user_fk = ?", new String[]{user_fk});
 
         if (c.moveToFirst()) {
             do {
