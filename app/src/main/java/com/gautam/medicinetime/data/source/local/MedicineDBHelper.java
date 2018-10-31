@@ -30,7 +30,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
     /**
      * Database version
      */
-    private static final String DATABASE_NAME = "MedicineAlarm_1.db";
+    private static final String DATABASE_NAME = "MedicineAlarm_2.db";
 
     /**
      * Table names
@@ -115,6 +115,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + HISTORIES_TABLE + "("
                     + KEY_ROWID + " integer primary key, "
                     + KEY_PILLNAME + " text not null, "
+                    + KEY_USER + " integer,"
                     + KEY_DOSE_QUANTITY + " text,"
                     + KEY_DOSE_UNITS + " text,"
                     + KEY_DATE_STRING + " text, "
@@ -236,6 +237,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         values.put(KEY_PILLNAME, history.getPillName());
         values.put(KEY_DATE_STRING, history.getDateString());
         values.put(KEY_HOUR, history.getHourTaken());
+        values.put(KEY_USER, history.getuser());
         values.put(KEY_MINUTE, history.getMinuteTaken());
         values.put(KEY_DOSE_QUANTITY, history.getDoseQuantity());
         values.put(KEY_DOSE_UNITS, history.getDoseUnit());
@@ -353,13 +355,13 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
      * @param day an integer that represents the day of week
      * @return a list of Alarms (not combined into full-model-alarms)
      */
-    public List<MedicineAlarm> getAlarmsByDay(int day) {
+    public List<MedicineAlarm> getAlarmsByDay(int day, String user_fk) {
         List<MedicineAlarm> daysAlarms = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " +
                 ALARM_TABLE + " alarm WHERE " +
                 "alarm." + KEY_DAY_WEEK +
-                " = '" + day + "'";
+                " = '" + day + "'"+"and user_fk = "+ user_fk;
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -388,11 +390,11 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
      * @return
      * @throws URISyntaxException
      */
-    public MedicineAlarm getAlarmById(long alarm_id) throws URISyntaxException {
+    public MedicineAlarm getAlarmById(long alarm_id, String user_fk) throws URISyntaxException {
 
         String dbAlarm = "SELECT * FROM " +
                 ALARM_TABLE + " WHERE " +
-                KEY_ROWID + " = " + alarm_id;
+                KEY_ROWID + " = " + alarm_id + " and user_fk = "+ user_fk;
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(dbAlarm, null);
@@ -493,7 +495,7 @@ public class MedicineDBHelper extends SQLiteOpenHelper {
         List<History> allHistory = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT h.* FROM histories as h, alarms as a where a.user_fk = ?", new String[]{user_fk});
+        Cursor c = db.rawQuery("SELECT * FROM histories where user_fk = ?", new String[]{user_fk});
 
         if (c.moveToFirst()) {
             do {

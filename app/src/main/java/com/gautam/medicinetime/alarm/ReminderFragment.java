@@ -15,8 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.gautam.medicinetime.R;
+import com.gautam.medicinetime.Session;
 import com.gautam.medicinetime.data.source.History;
 import com.gautam.medicinetime.data.source.MedicineAlarm;
+import com.gautam.medicinetime.data.source.local.MedicineDBHelper;
 import com.gautam.medicinetime.medicine.MedicineActivity;
 import com.gautam.medicinetime.views.RobotoBoldTextView;
 import com.gautam.medicinetime.views.RobotoRegularTextView;
@@ -69,6 +71,12 @@ public class ReminderFragment extends Fragment implements ReminderContract.View 
 
     private Vibrator mVibrator;
 
+    private Session session;
+
+    private String user_id;
+
+    MedicineDBHelper db;
+
     private ReminderContract.Presenter presenter;
 
     public static ReminderFragment newInstance(long id) {
@@ -83,6 +91,17 @@ public class ReminderFragment extends Fragment implements ReminderContract.View 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         id = getArguments().getLong(EXTRA_ID);
+
+        session = new Session(getContext());
+        String tipo = session.gettype();
+        String id = session.getid();
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
+        if(tipo.equals("1")){
+            user_id = db.pac_id(id);
+        }
+        else if(tipo.equals("2")){
+            user_id = id;
+        }
     }
 
     @Nullable
@@ -168,6 +187,7 @@ public class ReminderFragment extends Fragment implements ReminderContract.View 
         history.setDateString(dateString);
         history.setPillName(medicineAlarm.getPillName());
         history.setAction(1);
+        history.setUser(user_id);
         history.setDoseQuantity(medicineAlarm.getDoseQuantity());
         history.setDoseUnit(medicineAlarm.getDoseUnit());
 
@@ -205,6 +225,7 @@ public class ReminderFragment extends Fragment implements ReminderContract.View 
         history.setHourTaken(hour);
         history.setMinuteTaken(minute);
         history.setDateString(dateString);
+        history.setUser(user_id);
         history.setPillName(medicineAlarm.getPillName());
         history.setAction(2);
         history.setDoseQuantity(medicineAlarm.getDoseQuantity());

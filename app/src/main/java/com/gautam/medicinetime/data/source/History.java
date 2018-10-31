@@ -16,6 +16,8 @@ public class History {
 
     private String pillName;
 
+    private String user;
+
     private int action;
 
     private String doseQuantity;
@@ -25,12 +27,13 @@ public class History {
     public History() {
     }
 
-    public History(int hourTaken, int minuteTaken, String dateString, String pillName, int action, String doseQuantity, String doseUnit) {
+    public History(int hourTaken, int minuteTaken, String dateString, String pillName, int action, String doseQuantity, String doseUnit, String user) {
         this.hourTaken = hourTaken;
         this.minuteTaken = minuteTaken;
         this.dateString = dateString;
         this.pillName = pillName;
         this.action = action;
+        this.user = user;
         this.doseQuantity = doseQuantity;
         this.doseUnit = doseUnit;
     }
@@ -94,6 +97,10 @@ public class History {
     public void setAction(int action) {
         this.action = action;
     }
+
+    public String getuser(){ return user;}
+
+    public  void setUser(String user){ this.user = user;}
 
     /**
      * A helper method which returns the time of the alarm in string form

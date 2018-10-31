@@ -104,7 +104,7 @@ public class MedicineFragment extends Fragment implements MedicineContract.View 
         }
         else
         {
-            Toast.makeText(getContext(),"23", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),"23", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -159,7 +159,7 @@ public class MedicineFragment extends Fragment implements MedicineContract.View 
 
     @Override
     public void showMedicineList(List<MedicineAlarm> medicineAlarmList) {
-        //medicineAdapter.replaceData(medicineAlarmList);
+        medicineAdapter.replaceData(medicineAlarmList);
         rvMedList.setVisibility(View.VISIBLE);
         noMedView.setVisibility(View.GONE);
     }

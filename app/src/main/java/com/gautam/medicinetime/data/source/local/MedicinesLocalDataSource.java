@@ -78,7 +78,16 @@ public class MedicinesLocalDataSource implements MedicineDataSource {
 
     @Override
     public void getMedicineListByDay(int day, LoadMedicineCallbacks callbacks) {
-        List<MedicineAlarm> medicineAlarmList = mDbHelper.getAlarmsByDay(day);
+        String tipo = session.gettype();
+        String id = session.getid();
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
+        if(tipo.equals("1")){
+            user_id = mDbHelper.pac_id(id);
+        }
+        else if(tipo.equals("2")){
+            user_id = id;
+        }
+        List<MedicineAlarm> medicineAlarmList = mDbHelper.getAlarmsByDay(day, user_id);
         callbacks.onMedicineLoaded(medicineAlarmList);
     }
 
@@ -170,7 +179,16 @@ public class MedicinesLocalDataSource implements MedicineDataSource {
     }
 
     private MedicineAlarm getAlarmById(long alarm_id) throws URISyntaxException {
-        return mDbHelper.getAlarmById(alarm_id);
+        String tipo = session.gettype();
+        String id = session.getid();
+        //Preguntar que tipo de usuario es 1 para medico 2 para paciente
+        if(tipo.equals("1")){
+            user_id = mDbHelper.pac_id(id);
+        }
+        else if(tipo.equals("2")){
+            user_id = id;
+        }
+        return mDbHelper.getAlarmById(alarm_id, user_id);
     }
 
     public int getDayOfWeek(long alarm_id) throws URISyntaxException {

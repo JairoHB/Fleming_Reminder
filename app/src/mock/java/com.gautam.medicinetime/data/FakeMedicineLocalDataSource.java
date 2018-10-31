@@ -57,8 +57,8 @@ public class FakeMedicineLocalDataSource implements MedicineDataSource {
         addMedicine(1, hour, minute, "Paracetamol", "1.0", "tablet(s)", "0");
         addMedicine(2, hour + 2, minute + 1, "Crocin", "2.0", "capsule(s)", "0");
 
-        addHistory(hour, minute, dateString, "Crocin", 2, "2.0", "capsule(s)");
-        addHistory(hour + 2, minute + 1, dateString, "Paracetamol", 1, "1.0", "tablet(s)");
+        addHistory(hour, minute, dateString, "Crocin", 2, "2.0", "capsule(s)", "0");
+        addHistory(hour + 2, minute + 1, dateString, "Paracetamol", 1, "1.0", "tablet(s)", "0");
     }
 
 
@@ -67,8 +67,8 @@ public class FakeMedicineLocalDataSource implements MedicineDataSource {
         MEDICINE_SERVICE_DATA.put(String.valueOf(id), medicineAlarm);
     }
 
-    private static void addHistory(int hourTaken, int minuteTaken, String dateString, String pillName, int action, String doseQuantity, String doseUnit) {
-        History history = new History(hourTaken, minuteTaken, dateString, pillName, action, doseQuantity, doseUnit);
+    private static void addHistory(int hourTaken, int minuteTaken, String dateString, String pillName, int action, String doseQuantity, String doseUnit, String user) {
+        History history = new History(hourTaken, minuteTaken, dateString, pillName, action, doseQuantity, doseUnit, user);
         HISTORY_SERVICE_DATA.put(pillName, history);
     }
 
