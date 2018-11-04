@@ -24,4 +24,5 @@
     <string name="menu_stats">Reporte Mensual</string>
     <string name="title_continuous_use">Uso continuó</string>
     <string name="text_subrayado"><u>Regístrate aquí</u></string>
+    <string name="facebook_app_id">2153370761568248</string> <string name="fb_login_protocol_scheme">fb2153370761568248</string>
 </resources>

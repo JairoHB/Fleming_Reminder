@@ -28,6 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.gautam.medicinetime.Injection;
 import com.gautam.medicinetime.R;
 import com.gautam.medicinetime.Session;
@@ -103,6 +105,11 @@ public class MedicineActivity extends AppCompatActivity {
         session = new Session(this);
         String tipo = session.gettype();
         String tel = session.gettel();
+        PreferenceUtils utils = new PreferenceUtils();
+        if(utils.getuser(this) == null && AccessToken.getCurrentAccessToken() == null){
+            gologinscreen();
+        }
+
 
         //Preguntar que tipo de usuario es 1 para medico 2 para paciente
         if(tipo.equals("1")){
@@ -134,6 +141,9 @@ public class MedicineActivity extends AppCompatActivity {
                 Intent intent = new Intent(MedicineActivity.this, login.class);
                 startActivity(intent);
                 finish();
+                if(AccessToken.getCurrentAccessToken() != null){
+                    gologout();
+                }
             }
         });
 
@@ -184,6 +194,17 @@ public class MedicineActivity extends AppCompatActivity {
                 makeCall(tel);
             }
         });
+    }
+
+    private void gologout() {
+        LoginManager.getInstance().logOut();
+        gologinscreen();
+    }
+
+    private void gologinscreen() {
+        Intent intent = new Intent(this, login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public void makeCall(String tel)

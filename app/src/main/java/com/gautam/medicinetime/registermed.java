@@ -1,10 +1,12 @@
 package com.gautam.medicinetime;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,7 +17,8 @@ public class registermed extends Activity {
     MedicineDBHelper db;
     EditText username, email, password, password2;
     Button btnregistrar;
-    ImageView imgreg, face, google, twitter;
+    ImageView imgreg;
+    ImageButton imgback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,13 +34,9 @@ public class registermed extends Activity {
 
         //Iniciar imagenes
         imgreg=(ImageView)findViewById(R.id.imgreg);
-        face=(ImageView)findViewById(R.id.imgfacereg);
-        google=(ImageView)findViewById(R.id.imggooreg);
-        twitter=(ImageView)findViewById(R.id.imgtwireg);
         imgreg.setImageResource(R.drawable.doctor);
-        face.setImageResource(R.drawable.facebook);
-        google.setImageResource(R.drawable.google);
-        twitter.setImageResource(R.drawable.twitter);
+        imgback=(ImageButton)findViewById(R.id.btnregback);
+        imgback.setImageResource(R.drawable.ic_clear);
 
 
         btnregistrar.setOnClickListener(new View.OnClickListener(){
@@ -75,6 +74,15 @@ public class registermed extends Activity {
                         Toast.makeText(getApplicationContext(),"¡Contraseñas no coiciden!", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        imgback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
     }
